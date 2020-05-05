@@ -11,21 +11,7 @@
         <![endif]-->
    {% include "navbar.html" %}
    {% include "menu.html" %}
-    <!-- Main Menu area start-->
-    <div class="main-menu-area mg-tb-40">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <ul class="nav nav-tabs notika-menu-wrap menu-it-icon-pro">
-                        <li class="active"><a data-toggle="tab" href="#Home"><i class="fa fa-home"></i> Home</a>
-                        </li>
-                        <li><a data-toggle="tab" href="#"><i class="fa fa-bar-chart"></i> Analysis</a>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Main Menu area End-->
+   
     <!-- Start Email Statistic area-->
     <div class="notika-email-post-area">
         <div class="container">
@@ -34,7 +20,17 @@
                     <div class="recent-post-wrapper notika-shadow sm-res-mg-t-30 tb-res-ds-n dk-res-ds">
                         <div class="recent-post-ctn">
                             <div class="recent-post-title">
-                                <form>Form Upload</form>
+                                <h2>Form Upload</h2>
+                                <br>
+                                <form action="/predict" method="POST" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlFile1">Input File Here</label>
+                                        <input type="file" name="file" class="form-control-file" id="exampleFormControlFile1">
+                                    
+                                    </div>
+                                    <br>
+                                    <button type="submit" class="btn btn-primary">Submit</button>  
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -44,6 +40,7 @@
     </div>
     <!-- End Email Statistic area-->
     <!-- End Realtime sts area-->
+
   	{% include "footer.html" %}
     {% include "script.html" %}
 
