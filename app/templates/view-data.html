@@ -11,7 +11,7 @@
         <![endif]-->
    {% include "navbar.html" %}
    {% include "menu.html" %}
-   
+    
     <!-- Start Email Statistic area-->
     <div class="notika-email-post-area">
         <div class="container">
@@ -20,17 +20,12 @@
                     <div class="recent-post-wrapper notika-shadow sm-res-mg-t-30 tb-res-ds-n dk-res-ds">
                         <div class="recent-post-ctn">
                             <div class="recent-post-title">
-                                <h2>Form Upload</h2>
-                                <br>
-                                <form action="/upload" method="POST" enctype="multipart/form-data">
-                                    <div class="form-group">
-                                        <label for="exampleFormControlFile1">Input File Here</label>
-                                        <input type="file" name="file" class="form-control-file" id="exampleFormControlFile1">
-                                    
-                                    </div>
-                                    <br>
-                                    <button type="submit" class="btn btn-primary">Submit</button>  
-                                </form>
+                                <h2>Lihat data uji</h2>
+                            </div>
+                            <div class="table-responsive" style="overflow: auto;height: 500px;">
+                                {% for table in tables %}
+                                    {{table | safe}}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -40,7 +35,6 @@
     </div>
     <!-- End Email Statistic area-->
     <!-- End Realtime sts area-->
-
   	{% include "footer.html" %}
     {% include "script.html" %}
 
