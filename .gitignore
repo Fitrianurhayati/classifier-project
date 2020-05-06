@@ -1,7 +1,7 @@
 # Created by https://www.gitignore.io/api/osx,venv,macos,linux,python,django,pycharm,virtualenv
 
 ### Flask ###
-app/__pycache__/
+__pycache__/
 venv/
 env/
 .idea
