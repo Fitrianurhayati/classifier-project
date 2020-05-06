@@ -28,5 +28,4 @@ def predict():
 	classifier = Classifier(test_data=df)
 	classifier.preProcessing()
 	prediction = classifier.predict()
-	print(prediction)
-	return "OK"
+	return render_template("hasil-predict.html", tables=[prediction.to_html(classes='table table-striped', border=0,index=False, justify='left')])
