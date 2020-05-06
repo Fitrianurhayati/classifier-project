@@ -1,7 +1,7 @@
 # Created by https://www.gitignore.io/api/osx,venv,macos,linux,python,django,pycharm,virtualenv
 
 ### Flask ###
-__pycache__/
+app/__pycache__/
 venv/
 env/
 .idea
@@ -9,3 +9,4 @@ migrations/
 app/data/naive_bayes.b
 app/data/vectorizer.b
 app/tmp/
+*.pyc
