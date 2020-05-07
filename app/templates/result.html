@@ -1,0 +1,70 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+{% include "head.html" %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+   {% include "navbar.html" %}
+   {% include "menu.html" %}
+
+    <!-- Start Email Statistic area-->
+    <div class="notika-email-post-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="recent-post-wrapper notika-shadow sm-res-mg-t-30 tb-res-ds-n dk-res-ds">
+                        <div class="recent-post-ctn">
+                            <div class="recent-post-title">
+                                <h2>Hasil Klasifikasi Judul Skripsi Berdasarkan Bidang Minat</h2>
+                                <br>
+                                <form action="/result" id="myForm" method="POST">
+                                    <div class="form-group">
+                                        <label for="year">Select Year : </label>
+                                        <select id="mySelect" style="min-width:150px;" name="year" id="year">
+                                            <option value="">Choose Year</option>
+                                          {% for option in options %}
+                                            {{ option | safe }}
+                                        {% endfor %}
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="recent-post-wrapper notika-shadow sm-res-mg-t-30 tb-res-ds-n dk-res-ds">
+                        <div class="recent-post-ctn">
+                            <div class="recent-post-title">
+                                <div class="table-responsive" style="overflow: auto;height: 500px;">
+                                    {% for table in tables %}
+                                        {{table | safe}}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Email Statistic area-->
+    <!-- End Realtime sts area-->
+  	{% include "footer.html" %}
+    {% include "script.html" %}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script>
+        $('#mySelect').select2();
+        $('#mySelect').change(function () {
+            $('#myForm').submit();
+        });
+    </script>
+</body>
+
+</html>

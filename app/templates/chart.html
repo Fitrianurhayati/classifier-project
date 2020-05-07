@@ -1,0 +1,65 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+{% include "head.html" %}
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+   {% include "navbar.html" %}
+   {% include "menu.html" %}
+
+    <!-- Start Email Statistic area-->
+    <div class="notika-email-post-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="recent-post-wrapper notika-shadow sm-res-mg-t-30 tb-res-ds-n dk-res-ds">
+                        <div class="recent-post-ctn">
+                            <div class="col-12 col-md-8 col-lg-offset-2">
+                                <canvas id="line-chart" width="800" height="450"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Email Statistic area-->
+    <!-- End Realtime sts area-->
+  	{% include "footer.html" %}
+    {% include "script.html" %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script>
+        new Chart(document.getElementById("line-chart"), {
+          type: 'line',
+          data: {
+            labels: {{ years | safe }},
+            datasets: [{
+                data: {{ relata | safe }},
+                label: "Relata",
+                borderColor: "#ffeb3b",
+                fill: false
+              }, {
+                data: {{ sistem_cerdas | safe }},
+                label: "Sistem Cerdas",
+                borderColor: "#f44336",
+                fill: false
+              }
+            ]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'Classification Topic Research Chart'
+            }
+          }
+        });
+    </script>
+
+</body>
+
+</html>
