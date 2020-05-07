@@ -7,14 +7,13 @@ from sklearn.naive_bayes import MultinomialNB
 from app.module.slang import stp
 from openpyxl import load_workbook
 
-
 import math
 import numpy as np
 import nltk
 import pandas as pd
 import pickle
 import re
-import statistics 
+import statistics
 import sys
 
 # Define variable to use som e library
@@ -22,6 +21,7 @@ stemmer = StemmerFactory().create_stemmer()
 remover = StopWordRemoverFactory().create_stop_word_remover()
 vectorizer = TfidfVectorizer()
 naivebayes = MultinomialNB()
+
 
 # Create class for classifier
 class Classifier(object):
@@ -34,18 +34,18 @@ class Classifier(object):
         self.loadNB = None
 
         X = vectorizer.fit_transform(self.dataset.Preprocessing.values.astype('U'))
-        naivebayes.fit(X,self.dataset.Label)
+        naivebayes.fit(X, self.dataset.Label)
         vectorFile = open('app/tmp/vectorizer.b', 'wb')
         nbFile = open('app/tmp/naive_bayes.b', 'wb')
         pickle.dump(vectorizer, vectorFile)
         pickle.dump(naivebayes, nbFile)
-        vectorFile.close()  
-        nbFile.close() 
-        
+        vectorFile.close()
+        nbFile.close()
+
     def loadPickle(self):
         self.loadVector = pickle.load(open('app/tmp/vectorizer.b', 'rb'), encoding='latin1')
         self.loadNB = pickle.load(open('app/tmp/naive_bayes.b', 'rb'), encoding='latin1')
-    
+
     def preProcessing(self):
         cleanText = list()
         # Loop field Judul to preprocessing
@@ -58,11 +58,11 @@ class Classifier(object):
             words = list()
             for word in text.split():
                 if word in stp:
-                  """
+                    """
                   Replace word to stp
                   ex: cbc to stp[cbc] value
                   """
-                  word = word.replace(word, stp[word])
+                    word = word.replace(word, stp[word])
                 words.append(word)
             # Joining words to sentence text
             text = " ".join(words)
@@ -71,10 +71,10 @@ class Classifier(object):
             # Filtering
             text = remover.remove(text)
             cleanText.append(text)
-        
+
         self.testData['Preprocessing'] = cleanText
         return self.testData
-    
+
     def predict(self):
         # Load pickle for TF-IDF Vectorizer and Naive Bayes dataset
         self.loadPickle()
@@ -92,9 +92,8 @@ class Classifier(object):
         return self.testData
 
 
-
 def append_df_to_excel(filename, df, sheet_name='Sheet1', startrow=None,
-                       truncate_sheet=False, 
+                       truncate_sheet=False,
                        **to_excel_kwargs):
     """
     Append a DataFrame [df] to existing Excel file [filename]
@@ -130,7 +129,6 @@ def append_df_to_excel(filename, df, sheet_name='Sheet1', startrow=None,
     except NameError:
         FileNotFoundError = IOError
 
-
     try:
         # try to open an existing workbook
         writer.book = load_workbook(filename)
@@ -150,7 +148,7 @@ def append_df_to_excel(filename, df, sheet_name='Sheet1', startrow=None,
             writer.book.create_sheet(sheet_name, idx)
 
         # copy existing sheets
-        writer.sheets = {ws.title:ws for ws in writer.book.worksheets}
+        writer.sheets = {ws.title: ws for ws in writer.book.worksheets}
     except FileNotFoundError:
         # file does not exist yet, we will create it
         pass
