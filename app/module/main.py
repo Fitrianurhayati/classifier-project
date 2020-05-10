@@ -17,11 +17,11 @@ def index():
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
+	# define global variable
+    global year
     if request.method == "GET":
         return render_template("form.html")
     elif request.method == "POST":
-        # define global variable
-        global year
         year = request.form['year']
         file = request.files['file']
 
@@ -35,7 +35,6 @@ def upload():
 def predict():
     # define global variable
     global year
-
     df = pd.read_excel("app/tmp/data_uji.xlsx")
     # Define object for classifier
     classifier = Classifier(test_data=df)
