@@ -25,6 +25,7 @@
                                 <br>
                                 <form action="/upload" method="POST" enctype="multipart/form-data">
                                     <div class="form-group">
+                                        {{ message | safe}}
                                         <table style="width: 100%">
                                             <tr>
                                                 <td style="text-align: center; width: 33%;">
@@ -40,7 +41,7 @@
                                                     <br>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td style="text-align: center; width: 33%;">
                                                     <label for="tab-names">Input Tahun</label>
                                                 </td>
@@ -48,7 +49,7 @@
                                                 <td style="text-align: left; width: 33%;">
                                                     <select class="form-control" name="year" id="tab-names"></select>
                                                 </td>
-                                            </tr>
+                                            </tr> -->
                                         </table>
                                     </div>
                                     <br>

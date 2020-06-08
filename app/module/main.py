@@ -7,7 +7,6 @@ import os
 import pandas as pd
 import xlrd
 
-global year
 
 
 @app.route('/')
@@ -18,23 +17,23 @@ def index():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     # define global variableconda deactivate
-    global year
+    
     if request.method == "GET":
         return render_template("form.html")
     elif request.method == "POST":
-        year = request.form['year']
         file = request.files['file']
 
         file.save(os.path.join('app/tmp', 'data_uji.xlsx'))
-        df = pd.read_excel("app/tmp/data_uji.xlsx")
-        return render_template("view-data.html", tables=[
-            df.to_html(classes='table table-striped', border=0, index=False, justify='left')])
+        message = '<div class="alert alert-success" role="alert">File successfully uploaded</div>'
+        return render_template("form.html" , message=message)
 
 
-@app.route("/predict", methods=['GET'])
+@app.route("/predict", methods=['GET', 'POST'])
 def predict():
     # define global variable
-    global year
+    if request.method == "GET":
+        return render_template("view-data.html")
+    elif request.method == "POST":
     df = pd.read_excel("app/tmp/data_uji.xlsx")
     df = df[['Judul']]
     # Define object for classifier
