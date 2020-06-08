@@ -17,7 +17,7 @@ def index():
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
-	# define global variable
+    # define global variableconda deactivate
     global year
     if request.method == "GET":
         return render_template("form.html")
@@ -36,7 +36,7 @@ def predict():
     # define global variable
     global year
     df = pd.read_excel("app/tmp/data_uji.xlsx")
-    df = df [['Judul']]
+    df = df[['Judul']]
     # Define object for classifier
     classifier = Classifier(test_data=df)
     classifier.preProcessing()
@@ -44,7 +44,8 @@ def predict():
 
     year = year
     append_df_to_excel('app/tmp/result.xlsx', prediction, sheet_name=year, index=False)
-    return render_template("hasil-predict.html", tables=[prediction.to_html(classes='table table-striped', border=0, index=False, justify='left')])
+    return render_template("hasil-predict.html", tables=[
+        prediction.to_html(classes='table table-striped', border=0, index=False, justify='left')])
 
 
 @app.route('/chart', methods=["GET"])

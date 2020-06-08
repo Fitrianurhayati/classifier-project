@@ -28,13 +28,13 @@
                                         <table style="width: 100%">
                                             <tr>
                                                 <td style="text-align: center; width: 33%;">
-                                                    <label for="year">Input Tahun</label>
+                                                    <label for="filePicker">Input File Here</label>
                                                 </td>
                                                 <td style="text-align: center; width: 33%;">:</td>
-                                                <td style="text-align: left; width: 33%;">
-                                                    <input type="text" name="year" class="form-control-file" id="year">
+                                                <td style="text-align: center; width: 33%;">
+                                                    <input type="file" id="filePicker" name="file" class="form-control-file">
                                                 </td>
-                                            </tr>    
+                                            </tr>
                                             <tr>
                                                 <td>
                                                     <br>
@@ -42,19 +42,13 @@
                                             </tr>
                                             <tr>
                                                 <td style="text-align: center; width: 33%;">
-                                                    <label for="exampleFormControlFile1">Input File Here</label>
+                                                    <label for="tab-names">Input Tahun</label>
                                                 </td>
                                                 <td style="text-align: center; width: 33%;">:</td>
-                                                <td style="text-align: center; width: 33%;">
-                                                    <input type="file" name="file" class="form-control-file" id="exampleFormControlFile1">
+                                                <td style="text-align: left; width: 33%;">
+                                                    <select class="form-control" name="sheet" id="tab-names"></select>
                                                 </td>
                                             </tr>
-                                        
-                                        
-                                        
-                                    
-                                        
-                                        
                                         </table>
                                     </div>
                                     <br>
@@ -66,7 +60,6 @@
                                             
                                         </tr>
                                     </table>
-                                      
                                 </form>
                             </div>
                         </div>
@@ -80,7 +73,90 @@
 
   	{% include "footer.html" %}
     {% include "script.html" %}
+    <script src="static/js/jszip.min.js"></script>
+    <script type="text/javascript">
+       $(function() {
+          // This code will attach `fileselect` event to all file inputs on the page
+          $(document).on('change', ':file', function() {
+            var input = $(this),
+                numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+          });
 
+
+          $(document).ready( function() {
+        //below code executes on file input change and append name in text control
+              $(':file').on('fileselect', function(event, numFiles, label) {
+
+                  var input = $(this).parents('.input-group').find(':text'),
+                      log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+                  if( input.length ) {
+                      input.val(log);
+                  } else {
+                      if( log ) console.log(log);
+                  }
+
+              });
+          });
+
+        });
+    </script>
+    <script type="text/javascript">
+        'use strict'; // v2.3.2
+        var result, zip = new JSZip(),
+          processStartTime, s, i, index, id;
+
+        var getTab = function(base64file) {
+
+          zip = zip.load(base64file, {
+            base64: true
+          });
+          result = [];
+          processStartTime = Date.now();
+
+          if (s = zip.file('xl/workbook.xml')) {
+            s = s.asText();
+
+            s = s.split('<sheet ');
+            i = s.length;
+            while (--i) {
+              id = s[i].substr(s[i].indexOf('name="') + 6);
+              result.push(id.substring(0, id.indexOf('"')));
+            }
+          }
+              var sel = document.getElementById('tab-names');
+            for(var i = 0; i < result.length; i++) {
+                var opt = document.createElement('option');
+                opt.innerHTML = result[i];
+                opt.value = result[i];
+                sel.appendChild(opt);
+            }
+        }
+
+        var handleFileSelect = function(evt) {
+          var files = evt.target.files;
+          var file = files[0];
+
+          if (files && file) {
+            var reader = new FileReader();
+
+            reader.onload = function(readerEvt) {
+              var binaryString = readerEvt.target.result;
+              getTab(btoa(binaryString));
+            };
+
+            reader.readAsBinaryString(file);
+          }
+        };
+
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+          document.getElementById('filePicker').addEventListener('change', handleFileSelect, false);
+        } else {
+          alert('The File APIs are not fully supported in this browser.');
+        }
+    </script>
 </body>
 
 </html>
