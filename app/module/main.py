@@ -7,6 +7,7 @@ import os
 import pandas as pd
 import xlrd
 
+global year
 
 
 @app.route('/')
@@ -17,7 +18,6 @@ def index():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     # define global variableconda deactivate
-    
     if request.method == "GET":
         return render_template("form.html")
     elif request.method == "POST":
@@ -25,16 +25,36 @@ def upload():
 
         file.save(os.path.join('app/tmp', 'data_uji.xlsx'))
         message = '<div class="alert alert-success" role="alert">File successfully uploaded</div>'
-        return render_template("form.html" , message=message)
+        return render_template("form.html", message=message)
 
 
-@app.route("/predict", methods=['GET', 'POST'])
-def predict():
-    # define global variable
+@app.route('/view-data', methods=['GET', 'POST'])
+def view_data():
+    # Define global variable
+    global year
+
+    xls = xlrd.open_workbook(r'app/tmp/data_uji.xlsx', on_demand=True)
+    options = list()
+    for sheet_name in xls.sheet_names():
+        option = "<option value='{0}'>{0}</option>".format(sheet_name)
+        options.append(option)
+
     if request.method == "GET":
-        return render_template("view-data.html")
+        return render_template("view-data.html", options=options)
     elif request.method == "POST":
-    df = pd.read_excel("app/tmp/data_uji.xlsx")
+        year = request.form['year']
+        button = '<a href="/predict" class="btn btn-primary pull-right">Analysis</a>'
+        df = pd.read_excel("app/tmp/data_uji.xlsx", sheet_name=year)
+        return render_template("view-data.html", options=options, button=button, tables=[
+            df.to_html(classes='table table-striped', border=0, index=False, justify='left')])
+
+
+@app.route("/predict", methods=['GET'])
+def predict():
+    # Define global variable
+    global year
+
+    df = pd.read_excel("app/tmp/data_uji.xlsx", year)
     df = df[['Judul']]
     # Define object for classifier
     classifier = Classifier(test_data=df)

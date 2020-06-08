@@ -2,7 +2,8 @@
 <html class="no-js" lang="">
 
 <head>
-{% include "head.html" %}
+    {% include "head.html" %}
+    <link href="static/css/select2.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -20,8 +21,27 @@
                     <div class="recent-post-wrapper notika-shadow sm-res-mg-t-30 tb-res-ds-n dk-res-ds">
                         <div class="recent-post-ctn">
                             <div class="recent-post-title">
-                                <h2 style="text-align: center">LIHAT DATA UJI</h2>
-
+                                <h2 style="text-align: center">LIHAT DATA UJI {{ button | safe  }}</h2>
+                                <br>
+                                <form action="/view-data" id="myForm" method="POST">
+                                    <br>
+                                    <div class="form-group">
+                                        <table style="width:100%">
+                                            <td style="text-align: center; width: 33%;">
+                                                <label for="year">Select Year </label>
+                                            </td>
+                                            <td style="text-align: center; width: 33%;">:</td>
+                                            <td style="text-align: center; width: 33%;">
+                                                <select id="mySelect" style="min-width:150px; align-content: center; margin: 4px" name="year" id="year">
+                                                    <option value="">Choose Year</option>
+                                                  {% for option in options %}
+                                                    {{ option | safe }}
+                                                {% endfor %}
+                                                </select>
+                                            </td>
+                                        </table>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="table-responsive" style="overflow: auto;height: 500px;">
@@ -38,7 +58,13 @@
     <!-- End Realtime sts area-->
   	{% include "footer.html" %}
     {% include "script.html" %}
-
+    <script src="static/js/select2.js"></script>
+    <script>
+        $('#mySelect').select2();
+        $('#mySelect').change(function () {
+            $('#myForm').submit();
+        });
+    </script>
 </body>
 
 </html>
