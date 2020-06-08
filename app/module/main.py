@@ -17,8 +17,8 @@ def index():
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
-    # define global variableconda deactivate
     if request.method == "GET":
+        # define global variable
         return render_template("form.html")
     elif request.method == "POST":
         file = request.files['file']
