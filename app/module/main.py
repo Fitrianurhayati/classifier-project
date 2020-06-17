@@ -119,8 +119,9 @@ def chart():
         recall_scores.append(recall_score(actual, predict))
 
     return render_template('chart.html', years=xls.sheet_names(), relata=relata, sistem_cerdas=sistem_cerdas,
-                           list_df=list_df, accuracy=statistics.mean(accuracy_scores),
-                           precision=statistics.mean(precision_scores), recall=statistics.mean(recall_scores))
+                           list_df=list_df, accuracy=round(statistics.mean(accuracy_scores), 2),
+                           precision=round(statistics.mean(precision_scores), 2),
+                           recall=round(statistics.mean(recall_scores), 2))
 
 
 @app.route('/result', methods=['GET', 'POST'])
