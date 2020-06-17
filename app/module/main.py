@@ -1,10 +1,12 @@
 from app import app
 from flask import render_template, request
 from flask import request, render_template
+from sklearn.metrics import accuracy_score, precision_score, recall_score
 from app.module.classifier import Classifier, append_df_to_excel
 
 import os
 import pandas as pd
+import statistics
 import xlrd
 
 global year
@@ -57,7 +59,7 @@ def predict():
     df = pd.read_excel("app/tmp/data_uji.xlsx", year)
     df = df[['Judul']]
     # Define object for classifier
-    classifier = Classifier(test_data=df)
+    classifier = Classifier(test_data=df, train_data=pd.read_excel("app/tmp/training.xlsx"))
     classifier.preProcessing()
     prediction = classifier.predict()
 
@@ -79,8 +81,46 @@ def chart():
         relata.append(len(df.loc[df['Class'] == 'Relata'].Class))
         list_df.append(df)
 
+    # Accuracy, precision and recall
+    dataset = pd.read_excel("app/tmp/hasil-dataset.xlsx")
+
+    # Define list for iteration
+    iterationTest = list()
+    iterationTrain = list()
+
+    # Define divide rows to split data training and data testing
+    divideRows = round(len(dataset) / 10)
+
+    # Define head data
+    head = 0
+
+    # Define tail data
+    tail = divideRows
+
+    # Looping data and get iteration
+    for i in range(10):
+        iterationTest.append(dataset[head:tail][["Judul", "Label"]])
+        iterationTrain.append(dataset.drop(dataset.index[head:tail]))
+        head = tail
+        tail += divideRows
+
+    # Define list
+    accuracy_scores = list()
+    precision_scores = list()
+    recall_scores = list()
+
+    for i in range(10):
+        classifier = Classifier(test_data=iterationTest[i], train_data=iterationTrain[i])
+        classifier.preProcessing()
+        predict = classifier.pengujian()
+        actual = iterationTest[i].Label.tolist()
+        accuracy_scores.append(accuracy_score(actual, predict))
+        precision_scores.append(precision_score(actual, predict))
+        recall_scores.append(recall_score(actual, predict))
+
     return render_template('chart.html', years=xls.sheet_names(), relata=relata, sistem_cerdas=sistem_cerdas,
-                           list_df=list_df)
+                           list_df=list_df, accuracy=statistics.mean(accuracy_scores),
+                           precision=statistics.mean(precision_scores), recall=statistics.mean(recall_scores))
 
 
 @app.route('/result', methods=['GET', 'POST'])

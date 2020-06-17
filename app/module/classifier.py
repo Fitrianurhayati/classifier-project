@@ -1,7 +1,6 @@
 # Load library from third party library
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
-from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from app.module.slang import stp
@@ -26,9 +25,9 @@ naivebayes = MultinomialNB()
 # Create class for classifier
 class Classifier(object):
     # Define constructor
-    def __init__(self, test_data):
+    def __init__(self, test_data, train_data):
         # Define atribute
-        self.dataset = pd.read_excel("app/tmp/training.xlsx")
+        self.dataset = train_data
         self.testData = test_data
         self.loadVector = None
         self.loadNB = None
@@ -90,6 +89,20 @@ class Classifier(object):
 
         self.testData["Class"] = result
         return self.testData
+
+    def pengujian(self):
+        # Load pickle for TF-IDF Vectorizer and Naive Bayes dataset
+        self.loadPickle()
+
+        # Define result
+        result = list()
+
+        # Get prediction
+        termFrequency = self.loadVector.transform(self.testData["Preprocessing"].values.astype('U'))
+        for i in termFrequency:
+            result.append(self.loadNB.predict(i)[0])
+
+        return result
 
 
 def append_df_to_excel(filename, df, sheet_name='Sheet1', startrow=None,

@@ -19,6 +19,15 @@
                 <div class="col-lg-12">
                     <div class="recent-post-wrapper notika-shadow sm-res-mg-t-30 tb-res-ds-n dk-res-ds">
                         <div class="recent-post-ctn">
+                            <div class="col-12 col-md-8">
+                                <h4> Accuracy = {{ accuracy | safe }}</h4>
+                                <h4> Precision = {{ precision | safe }}</h4>
+                                <h4> Recall = {{ recall | safe }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-post-wrapper notika-shadow sm-res-mg-t-30 tb-res-ds-n dk-res-ds">
+                        <div class="recent-post-ctn">
                             <div class="col-12 col-md-8 col-lg-offset-2">
                                 <canvas id="line-chart" width="800" height="450"></canvas>
                             </div>
