@@ -21,7 +21,12 @@
                         <div class="recent-post-ctn">
                             <div class="recent-post-title">
                                 <h2 style="text-align: center;">HASIL PREDIKSI</h2>
-
+                                <p>
+                                    Hasil klasifikasi pada data judul skripsi tahun <b>{{ year | safe }}</b>
+                                    memiliki nilai akurasi sebesar <b>{{ accuracy | safe }}%</b>,
+                                    nilai presisi sebesar <b>{{ precision | safe }}%</b> dan
+                                    nilai recall sebesar <b>{{ recall | safe }}%</b>
+                                </p>
                             </div>
                         </div>
                         <div class="table-responsive" style="overflow: auto;height: 500px;">

@@ -63,10 +63,58 @@ def predict():
     classifier.preProcessing()
     prediction = classifier.predict()
 
+    labels = list()
+    for label in df['Class']:
+        if label == 'Relata':
+            labels.append(0)
+        else:
+            labels.append(1)
+
+    prediction['Label'] = labels
+
+    # Define list for iteration
+    iterationTest = list()
+    iterationTrain = list()
+
+    # Define divide rows to split data training and data testing
+    divideRows = round(len(prediction) / 10)
+
+    # Define head data
+    head = 0
+
+    # Define tail data
+    tail = divideRows
+
+    # Looping data and get iteration
+    for i in range(10):
+        iterationTest.append(prediction[head:tail][["Judul", "Label"]])
+        iterationTrain.append(prediction.drop(prediction.index[head:tail]))
+        head = tail
+        tail += divideRows
+
+    # Define list
+    accuracy_scores = list()
+    precision_scores = list()
+    recall_scores = list()
+
+    for i in range(10):
+        classifier = Classifier(test_data=iterationTest[i], train_data=iterationTrain[i])
+        classifier.preProcessing()
+        predict = classifier.pengujian()
+        actual = iterationTest[i].Label.tolist()
+        accuracy_scores.append(accuracy_score(actual, predict))
+        precision_scores.append(precision_score(actual, predict))
+        recall_scores.append(recall_score(actual, predict))
+
     year = year
     append_df_to_excel('app/tmp/result.xlsx', prediction, sheet_name=year, index=False)
+
+    df = prediction[['Judul','Preprocessing', 'Class']]
     return render_template("hasil-predict.html", tables=[
-        prediction.to_html(classes='table table-striped', border=0, index=False, justify='left')])
+        df.to_html(classes='table table-striped', border=0, index=False, justify='left')], year=year,
+                           accuracy=round(statistics.mean(accuracy_scores), 2) * 100,
+                           precision=round(statistics.mean(precision_scores), 2) * 100,
+                           recall=round(statistics.mean(recall_scores), 2) * 100)
 
 
 @app.route('/chart', methods=["GET"])
